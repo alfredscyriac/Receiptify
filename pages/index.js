@@ -2,7 +2,7 @@ import { Hero } from "./landing/Hero";
 import { ProblemSolution } from "./landing/ProblemSolution";
 import { Features } from "./landing/Features";
 import { HowItWorks } from "./landing/HowItWorks";
-import { CTA } from "./landing/calltoaction";
+import { CTA } from "./landing/CallToAction";
 
 const Index = () => {
   return (

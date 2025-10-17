@@ -1,6 +1,5 @@
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import heroImage from "public/hero-image.jpg";
 
 export const Hero = () => {
   return (
@@ -29,7 +28,7 @@ export const Hero = () => {
               finances in perfect order.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="hero" size="xl" className="group">
+              {/* <Button variant="hero" size="xl" className="group">
                 Get Started Free
                 <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
@@ -39,7 +38,7 @@ export const Hero = () => {
                 className="bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-sm"
               >
                 Watch Demo
-              </Button>
+              </Button> */}
             </div>
           </div>
 
@@ -50,7 +49,7 @@ export const Hero = () => {
           >
             <div className="absolute inset-0 bg-gradient-accent rounded-3xl blur-2xl opacity-30" />
             <img
-              src={heroImage}
+              src="/hero-image.jpg"
               alt="Receipt management dashboard"
               className="relative rounded-3xl shadow-2xl w-full transform hover:scale-105 transition-transform duration-500"
             />

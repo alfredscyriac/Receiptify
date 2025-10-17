@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 export const CTA = () => {
@@ -53,7 +53,7 @@ export const CTA = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in"
             style={{ animationDelay: "0.3s" }}
           >
-            <Button
+            {/* <Button
               size="xl"
               className="bg-white text-primary hover:bg-white/90 shadow-2xl hover:scale-105 font-semibold"
             >
@@ -66,7 +66,7 @@ export const CTA = () => {
               className="bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur-sm"
             >
               Schedule a Demo
-            </Button>
+            </Button> */}
           </div>
 
           <p className="text-white/80 mt-8 text-sm">

@@ -1,7 +1,4 @@
 import { Scan, FolderKanban, TrendingUp } from "lucide-react";
-import featureScan from "public/feature-scan.jpg";
-import featureOrganize from "public/feature-organize.jpg";
-import featureInsights from "public/feature-insights.jpg"
 
 export const Features = () => {
   const features = [
@@ -10,21 +7,21 @@ export const Features = () => {
       title: "AI-Powered Scanning",
       description:
         "Upload receipts and let AI instantly extract store name, date, total, and category",
-      image: featureScan,
+      image: "/feature-scan.jpg",
     },
     {
       icon: FolderKanban,
       title: "Smart Organization",
       description:
         "Auto-categorized folders plus custom categories make finding receipts effortless",
-      image: featureOrganize,
+      image: "/feature-organize.jpg",
     },
     {
       icon: TrendingUp,
       title: "Financial Insights",
       description:
         "Track your 30-day spending patterns and see exactly where your money goes",
-      image: featureInsights,
+      image: "/feature-insights.jpg",
     },
   ];
 
