@@ -1,14 +1,13 @@
-// import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 export const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-hero overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary-glow rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500 rounded-full blur-3xl animate-pulse" />
         <div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-accent-glow rounded-full blur-3xl animate-pulse"
+          className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500 rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "1s" }}
         />
       </div>
@@ -16,10 +15,10 @@ export const Hero = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Text content */}
-          <div className="text-white space-y-8 animate-fade-in">
+          <div className="text-white space-y-8">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
               Your Receipts,
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-glow">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-cyan-300">
                 Perfectly Organized
               </span>
             </h1>
@@ -28,26 +27,19 @@ export const Hero = () => {
               finances in perfect order.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              {/* <Button variant="hero" size="xl" className="group">
+              <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 transition-all hover:scale-105">
                 Get Started Free
-                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button
-                variant="outline"
-                size="xl"
-                className="bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-sm"
-              >
-                Watch Demo
-              </Button> */}
+                <ArrowRight className="w-5 h-5" />
+              </button>
+              <button className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-4 rounded-lg font-semibold text-lg backdrop-blur-sm transition-all">
+                Sign in 
+              </button>
             </div>
           </div>
 
           {/* Hero image */}
-          <div
-            className="relative animate-fade-in"
-            style={{ animationDelay: "0.2s" }}
-          >
-            <div className="absolute inset-0 bg-gradient-accent rounded-3xl blur-2xl opacity-30" />
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-3xl blur-2xl opacity-30" />
             <img
               src="/hero-image.jpg"
               alt="Receipt management dashboard"
