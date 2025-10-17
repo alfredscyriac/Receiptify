@@ -8,7 +8,7 @@ export default function SignUpPage() {
                 <SignUpForm/>
                 <p className="text-center text-gray-400 mt-4">
                     Already have an account?{' '}
-                    <Link href="/login" className="bg-cyan-500 hover:from-purple-700 hover:via-purple-600 hover:to-cyan-600 font-semibold">
+                    <Link href="/login" className="text-cyan-500 font-semibold">
                         Login
                     </Link>
                 </p>

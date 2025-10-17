@@ -8,7 +8,7 @@ export default function LoginPage(){
                 <LoginForm/>
                 <p className="text-center text-gray-400 mt-4">
                     Don't have an account?{' '}
-                    <Link href="/signup" className="bg-cyan-500 hover:from-purple-700 hover:via-purple-600 hover:to-cyan-600 font-semibold">
+                    <Link href="/signup" className="text-cyan-500 font-semibold">
                         Sign Up
                     </Link>
                 </p>

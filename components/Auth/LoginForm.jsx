@@ -50,7 +50,7 @@ export default function LoginForm(){
         <div className='w-full max-w-md mx-auto'>
             <div className='bg-gray-900 shadow-2xl rounded-lg px-8 pt-6 pb-8 mb-4 border border-gray-800'>
                 <h2 className='text-3xl font-bold text-center mb-6 bg-gradient-to-r from-purple-600 via-purple-500 to-cyan-500 bg-clip-text text-transparent'>
-                    Login
+                    Sign In
                 </h2>
 
                 { error && (
