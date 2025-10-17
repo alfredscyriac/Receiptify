@@ -23,13 +23,13 @@ export const ProblemSolution = () => {
   ];
 
   return (
-    <section className="py-24 bg-surface-light">
+    <section className="py-24 bg-white">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             The Receipt Problem
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Managing physical receipts is frustrating and inefficient. We built
             a better solution.
           </p>
@@ -39,21 +39,20 @@ export const ProblemSolution = () => {
           {problems.map((problem, index) => (
             <div
               key={index}
-              className="bg-surface-light-elevated p-8 rounded-2xl shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="bg-gray-50 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-destructive/10 rounded-xl flex items-center justify-center mb-6">
-                <problem.icon className="w-7 h-7 text-destructive" />
+              <div className="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center mb-6">
+                <problem.icon className="w-7 h-7 text-red-500" />
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-foreground">
+              <h3 className="text-xl font-semibold mb-3 text-gray-900">
                 {problem.title}
               </h3>
-              <p className="text-muted-foreground">{problem.description}</p>
+              <p className="text-gray-600">{problem.description}</p>
             </div>
           ))}
         </div>
 
-        <div className="bg-gradient-accent p-12 rounded-3xl text-center shadow-glow animate-fade-in">
+        <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-cyan-500 p-12 rounded-3xl text-center shadow-xl">
           <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
             There's a Better Way
           </h3>
