@@ -1,7 +1,7 @@
 import { Scan, FolderKanban, TrendingUp } from "lucide-react";
-import featureScan from "@/assets/feature-scan.jpg";
-import featureOrganize from "@/assets/feature-organize.jpg";
-import featureInsights from "@/assets/feature-insights.jpg";
+import featureScan from "public/feature-scan.jpg";
+import featureOrganize from "public/feature-organize.jpg";
+import featureInsights from "public/feature-insights.jpg"
 
 export const Features = () => {
   const features = [
