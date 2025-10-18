@@ -23,7 +23,7 @@ export const CTA = () => {
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="flex flex-col justify-center items-center max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 animate-fade-in">
             Ready to Get Organized?
           </h2>
@@ -68,10 +68,10 @@ export const CTA = () => {
               Schedule a Demo
             </Button> */}
           </div>
-
-          <p className="text-white/80 mt-8 text-sm">
-            Join 50,000+ users managing their receipts smarter
-          </p>
+          <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 mt-3 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 transition-all hover:scale-105 hover:cursor-pointer">
+            Get Started Today
+            <ArrowRight className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </section>
