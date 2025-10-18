@@ -44,8 +44,8 @@ const ReceiptGrid = ({ receipts, onSelectReceipt, selectedCategory, searchQuery,
         return null
     }
     return (
-        <div>
-            Dilver Singh
+        <div className='w-full grid-cols-4 border-2 border-white'>
+
         </div>
     )
 }

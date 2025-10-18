@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { UploadCloudIcon, Loader2, CheckCircle, XCircle } from 'lucide-react'
 import { uploadReceipt } from '@/lib/utils/uploadReceipt'
-import { supabase } from '@/lib/utils/supabaseClient'
-import toast from 'react-hot-toast'; 
+import { createClient } from '@/lib/utils/supabaseClient'
 
 const UploadButton = ({ onUploadComplete }) => {
     const fileInputRef = useRef(null)
