@@ -1,4 +1,4 @@
-import { Upload, Sparkles, Search } from "lucide-react";
+import { Upload, Sparkles, Search, ChartColumn } from "lucide-react";
 
 export const HowItWorks = () => {
   const steps = [
@@ -23,6 +23,13 @@ export const HowItWorks = () => {
       description:
         "Search by store, date, or category. Download receipts whenever you need them",
     },
+    {
+      icon: ChartColumn,
+      number: "04",
+      title: "Track Your Spending",
+      description:
+        "Get AI-powered insights and personalized tips to save money each month",
+    },
   ];
 
   return (
@@ -33,11 +40,11 @@ export const HowItWorks = () => {
             How It Works
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Three simple steps to never lose a receipt again
+            Four simple steps to keeps your finances in perfect order.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-12 relative">
+        <div className="grid md:grid-cols-2 gap-10 relative">
           {/* Connection lines for desktop */}
           <div className="hidden md:block absolute top-20 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 via-cyan-500 to-purple-500 opacity-30" />
 

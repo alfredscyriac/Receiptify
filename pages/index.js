@@ -1,9 +1,9 @@
-import { Hero } from "./landing/Hero";
-import { ProblemSolution } from "./landing/ProblemSolution";
-import { Features } from "./landing/Features";
-import { HowItWorks } from "./landing/HowItWorks";
-import { CTA } from "./landing/CallToAction";
-import Navbar from "@/components/Auth/Navbar";
+import { Hero } from "../components/landing/Hero";
+import { ProblemSolution } from "../components/landing/ProblemSolution";
+import { Features } from "../components/landing/Features";
+import { HowItWorks } from "../components/landing/HowItWorks";
+import { CTA } from "../components/landing/CallToAction";
+import Navbar from "@/components/auth/Navbar";
 
 const Index = () => {
   return (
