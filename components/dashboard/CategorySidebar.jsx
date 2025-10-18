@@ -53,7 +53,7 @@ const CategorySideBar = () => {
         },
         {
             icon: FolderIcon,
-            title: "Other"
+            title: "Miscellaneous"
         }
     ]
     return (

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createClient } from '@/lib/utils/supabasecomp'
+import { createClient } from '@/lib/utils/supabaseClient'
 import { useRouter } from 'next/router'
 import { Mail, Lock } from 'lucide-react'
 
