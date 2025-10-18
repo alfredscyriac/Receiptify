@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { UploadCloudIcon, Loader2, CheckCircle, XCircle } from 'lucide-react'
 import { uploadReceipt } from '@/lib/utils/uploadReceipt'
-import { createClient } from '@/lib/utils/supabaseClient'
+import { supabase } from '@/lib/utils/supabaseClient'
 import toast from 'react-hot-toast'; 
 
 const UploadButton = ({ onUploadComplete }) => {
@@ -74,7 +74,6 @@ const UploadButton = ({ onUploadComplete }) => {
         setUploadStatus(null)
 
         try {
-            const supabase = createClient()
             const { data: { user }, error: userError } = await supabase.auth.getUser()
 
             if (userError || !user) {

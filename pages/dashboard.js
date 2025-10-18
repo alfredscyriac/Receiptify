@@ -1,18 +1,46 @@
-import { supabase } from "@/lib/utils/supabaseClient";
+import createClient, { supabase } from "@/lib/utils/supabaseClient";
 import CategorySidebar from "@/components/dashboard/CategorySidebar";
 import UploadButton from "@/components/dashboard/UploadButton";
 import SearchBar from "@/components/dashboard/SearchBar";
 import ReceiptGrid from "@/components/dashboard/ReceiptGrid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Dashboard = () => {
     const [receipts, setReceipts] = useState([])
+    const [searchResults, setSearchResults] = useState([])
+    const [isSearching, setIsSearching] = useState(false)
+    const [selectedCategory, setSelectedCategory] = useState("Food & Dining")
+
+    useEffect(() => {
+        handleCategorySelect("Food & Dining")
+    }, [])
 
     const handleUploadComplete = (newReceipt) => {
         console.log('New receipt uploaded:', newReceipt)
         setReceipts(prev => [newReceipt, ...prev])
     }
+
+    const handleSearch = async (searchQuery) => {
+        if (!searchQuery || searchQuery.trim() === '') {
+            setSearchResults([])
+            setIsSearching(false)
+            return
+        }
+
+        setIsSearching(true)
+        const results = await getRecieptsBySearchQuery(searchQuery)
+        setSearchResults(results)
+    }
+
+    const handleCategorySelect = async (categoryName) => {
+        setSelectedCategory(categoryName)
+        setIsSearching(false)
+        const results = await getReceipts(categoryName)
+        setReceipts(results)
+    }
+
     const getReceipts = async(category_name) => {
+        const supabase = createClient()
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         if(userError || !user) {
             console.error(userError);
@@ -33,6 +61,7 @@ const Dashboard = () => {
     }
 
     const getRecieptsBySearchQuery = async(searchQuery) => {
+        const supabase = createClient()
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         if(userError || !user) {
             console.error(userError);
@@ -91,14 +120,21 @@ const Dashboard = () => {
                             <h2 className="text-lg font-medium mb-3 text-blue-300">
                                 Categories
                             </h2>
-                            <CategorySidebar/>
+                            <CategorySidebar
+                                onSelectCategory={handleCategorySelect}
+                                selectedCategory={selectedCategory}
+                            />
                         </div>
                     </div>
                     <div className="md:col-span-2">
                         <div className="mb-4">
-                            <SearchBar/>
+                            <SearchBar onSearch={handleSearch}/>
                         </div>
-                        <ReceiptGrid/>
+                        <ReceiptGrid
+                            receipts={isSearching ? searchResults : receipts}
+                            selectedCategory={selectedCategory}
+                            isSearching={isSearching}
+                        />
                     </div>
                 </div>
             </div>

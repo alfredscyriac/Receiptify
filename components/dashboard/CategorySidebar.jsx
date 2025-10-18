@@ -10,10 +10,8 @@ import {
   SparklesIcon,
   FolderIcon,
 } from 'lucide-react'
-import { useState } from 'react'
 
-const CategorySideBar = () => {
-    const [selectedCategory, setSelectedCategory] = useState(0)
+const CategorySideBar = ({ onSelectCategory, selectedCategory}) => {
     const categories = [
         {
             icon: UtensilsCrossed,
@@ -59,15 +57,18 @@ const CategorySideBar = () => {
     return (
         <div className="grid grid-rows-10 max-w-[380px] gap-3">
             {categories.map((category, i) => {
+                const isSelected = selectedCategory == category.title
                 return (
-                    <div key={i} className={`flex gap-4 items-center rounded-lg p-4 cursor-pointer transition-all duration-200 ${selectedCategory == i ? `bg-gradient-to-r from-blue-400 to-indigo-500 shadow-md` : 'bg-gray-700 bg-opacity-40 hover:bg-gray-700'}`}>
+                    <div 
+                        key={i} 
+                        onClick={() => onSelectCategory(category.title)}
+                        className={`flex gap-4 items-center rounded-lg p-4 cursor-pointer transition-all duration-200 ${isSelected ? 'bg-gradient-to-r from-blue-400 to-indigo-500 shadow-md' : 'bg-gray-700 bg-opacity-40 hover:bg-gray-700'}`}
+                    >
                         <category.icon/>
                         <h1 className='text-base text-white'>{category.title}</h1>
                     </div>
                 )
             })}
-
-
         </div>
     )
 }
