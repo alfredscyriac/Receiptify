@@ -1,13 +1,15 @@
 import React, { useRef, useState } from 'react'
 import { UploadCloudIcon, Loader2, CheckCircle, XCircle } from 'lucide-react'
 import { uploadReceipt } from '@/lib/utils/uploadReceipt'
-import { createClient } from '@/lib/utils/supabasecomp'
+import { createClient } from '@/lib/utils/supabaseClient'
+import toast from 'react-hot-toast'; 
 
-const UploadButton = ({ onFileSelect }) => {
+const UploadButton = ({ onUploadComplete }) => {
     const fileInputRef = useRef(null)
     const [isDragging, setIsDragging] = useState(false)
     const [uploading, setUploading] = useState(false)
     const [uploadStatus, setUploadStatus] = useState(null) 
+    const [uploadedCategory, setUploadedCategory] = useState(null)
 
     const handleClick = () => {
         if (!uploading) {
@@ -83,6 +85,7 @@ const UploadButton = ({ onFileSelect }) => {
 
             if (result.success) {
                 setUploadStatus('success')
+                setUploadedCategory(result.analysis.category)
 
                 if (onUploadComplete) {
                     onUploadComplete(result.receipt)
@@ -90,10 +93,11 @@ const UploadButton = ({ onFileSelect }) => {
 
                 setTimeout(() => {
                     setUploadStatus(null)
+                    setUploadedCategory(null)
                     if (fileInputRef.current) {
                         fileInputRef.current.value = ''
                     }
-                }, 2000)
+                }, 4000)
             } else {
                 throw new Error(result.error)
             }
@@ -143,7 +147,7 @@ const UploadButton = ({ onFileSelect }) => {
             </h3>
             <p className="text-blue-100 text-sm">
                 {uploading && 'Please wait while we process your receipt'}
-                {!uploading && uploadStatus === 'success' && 'Receipt saved to your account'}
+                {!uploading && uploadStatus === 'success' && `Receipt saved to ${uploadedCategory|| 'your account'}`}
                 {!uploading && uploadStatus === 'error' && 'Please try again'}
                 {!uploading && !uploadStatus && (isDragging ? 'Drop your receipt here' : 'Drag & drop or click to browse')}
             </p>
