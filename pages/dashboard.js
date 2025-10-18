@@ -71,21 +71,23 @@ const Dashboard = () => {
         const { data: receipts, error } = await supabase
             .from("receipts")
             .select("*")
-            .ilike("name", `%${searchQuery}%`)
+            .ilike("store_name", `%${searchQuery}%`)
             .eq("user_id", user.id);
         
         if (error) {
             console.error(error);
             return []
         }
+        console.log(receipts)
         return receipts
     }
 
     const deleteReceipt = async(receiptId) => {
+        const supabase = createClient()
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         if(userError || !user) {
             console.error(userError);
-            return;git 
+            return;
         }
         try {
             const response = await fetch("/api/db/deleteReceipts", {
