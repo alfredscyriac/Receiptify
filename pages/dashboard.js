@@ -11,6 +11,25 @@ const Dashboard = () => {
         console.log('New receipt uploaded:', newReceipt)
         setReceipts(prev => [newReceipt, ...prev])
     }
+    const getReceipts = async(category_name) => {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if(userError || !user) {
+            console.error(userError);
+            return;
+        }
+
+        const { data: receipts, error } = await supabase
+            .from("receipts")
+            .select("*")
+            .eq("category", category_name)
+            .eq("user_id", user.id);
+        
+        if (error) {
+            console.error(error);
+            return [];
+        }
+        return receipts
+    }
     return (
         <div className="w-full min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
             <div className="max-w-5xl mx-auto px-6 py-8">
