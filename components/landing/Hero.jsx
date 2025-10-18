@@ -32,9 +32,6 @@ export const Hero = () => {
                 Get Started
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <Link href="/signup" className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-4 rounded-lg font-semibold text-lg backdrop-blur-sm transition-all hover:cursor-pointer">
-                Sign up 
-              </Link>
             </div>
           </div>
 

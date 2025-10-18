@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { createClient } from "@/lib/utils/supabasecomp";
+import { createClient } from "@/lib/utils/supabaseClient";
 
 export default function ProtectedRoute({children}) {
     const router = useRouter()
