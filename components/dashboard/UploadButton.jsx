@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { UploadCloudIcon, Loader2, CheckCircle, XCircle } from 'lucide-react'
 import { uploadReceipt } from '@/lib/utils/uploadReceipt'
-import { createClient } from '@/lib/utils/supabaseClient'
+import createClient from '@/lib/utils/supabaseClient'
 
 const UploadButton = ({ onUploadComplete }) => {
     const fileInputRef = useRef(null)
@@ -73,6 +73,7 @@ const UploadButton = ({ onUploadComplete }) => {
         setUploadStatus(null)
 
         try {
+            const supabase = createClient()
             const { data: { user }, error: userError } = await supabase.auth.getUser()
 
             if (userError || !user) {

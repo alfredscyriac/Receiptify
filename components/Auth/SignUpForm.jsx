@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "@/lib/utils/supabaseClient";
+import createClient from "@/lib/utils/supabaseClient";
 import { useRouter } from "next/router";
 import { Mail, Lock } from "lucide-react";
 
@@ -9,6 +9,7 @@ export default function SignUpForm() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const router = useRouter()
+    const supabase = createClient()
 
     const handleEmailSignUp = async (e) => {
         e.preventDefault()

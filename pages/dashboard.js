@@ -1,4 +1,4 @@
-import createClient, { supabase } from "@/lib/utils/supabaseClient";
+import createClient from "@/lib/utils/supabaseClient";
 import CategorySidebar from "@/components/dashboard/CategorySidebar";
 import UploadButton from "@/components/dashboard/UploadButton";
 import SearchBar from "@/components/dashboard/SearchBar";
@@ -130,7 +130,11 @@ const Dashboard = () => {
                         <div className="mb-4">
                             <SearchBar onSearch={handleSearch}/>
                         </div>
-                        <ReceiptGrid />
+                        <ReceiptGrid
+                            receipts={isSearching ? searchResults : receipts}
+                            selectedCategory={selectedCategory}
+                            isSearching={isSearching}
+                        />
                     </div>
                 </div>
             </div>
