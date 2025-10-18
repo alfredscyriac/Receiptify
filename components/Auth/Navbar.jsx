@@ -21,7 +21,7 @@ const Navbar = () => {
             </div>
             <button className="bg-purple-600 hover:bg-purple-700 text-white cursor-pointer px-6 py-4 mr-12 rounded-4xl font-semibold text-lg flex items-center justify-center gap-2 transition-all hover:scale-105"
             onClick={() => router.push("/signup")}>
-            Get Started Free
+                Get Started
             <ArrowRight className="w-5 h-5" />
             </button>
         </div>
