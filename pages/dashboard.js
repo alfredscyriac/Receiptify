@@ -30,6 +30,33 @@ const Dashboard = () => {
         }
         return receipts
     }
+
+    const deleteReceipt = async(receiptId) => {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if(userError || !user) {
+            console.error(userError);
+            return;
+        }
+        try {
+            const response = await fetch("/api/db/deleteReceipts", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ receiptId, userId: user.id }),
+            });
+
+            const result = await response.json()
+            if (!response.ok) {
+                console.error("Delete failed:", result);
+                return { error: result };
+            }
+            return result
+
+        } catch(err) {
+            console.error(err)
+            return
+        }
+    }
+
     return (
         <div className="w-full min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
             <div className="max-w-5xl mx-auto px-6 py-8">
