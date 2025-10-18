@@ -2,6 +2,7 @@ import { supabase } from "@/lib/utils/supabaseClient";
 import CategorySidebar from "@/components/dashboard/CategorySidebar";
 import UploadButton from "@/components/dashboard/UploadButton";
 import SearchBar from "@/components/dashboard/SearchBar";
+import ReceiptGrid from "@/components/dashboard/ReceiptGrid";
 import { useState } from "react";
 
 const Dashboard = () => {
@@ -77,6 +78,7 @@ const Dashboard = () => {
                         <div className="mb-4">
                             <SearchBar/>
                         </div>
+                        <ReceiptGrid/>
                     </div>
                 </div>
             </div>
