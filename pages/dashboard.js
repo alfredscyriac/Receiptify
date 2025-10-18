@@ -1,5 +1,6 @@
 import CategorySidebar from "@/components/dashboard/CategorySidebar";
 import UploadButton from "@/components/dashboard/UploadButton";
+import SearchBar from "@/components/dashboard/SearchBar";
 
 const Dashboard = () => {
     return (
@@ -16,6 +17,11 @@ const Dashboard = () => {
                                 Categories
                             </h2>
                             <CategorySidebar/>
+                        </div>
+                    </div>
+                    <div className="md:col-span-2">
+                        <div className="mb-4">
+                            <SearchBar/>
                         </div>
                     </div>
                 </div>
