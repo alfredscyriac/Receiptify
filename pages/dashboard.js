@@ -32,11 +32,31 @@ const Dashboard = () => {
         return receipts
     }
 
+    const getRecieptsBySearchQuery = async(searchQuery) => {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if(userError || !user) {
+            console.error(userError);
+            return [];
+        }
+
+        const { data: receipts, error } = await supabase
+            .from("receipts")
+            .select("*")
+            .ilike("name", `%${searchQuery}%`)
+            .eq("user_id", user.id);
+        
+        if (error) {
+            console.error(error);
+            return []
+        }
+        return receipts
+    }
+
     const deleteReceipt = async(receiptId) => {
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         if(userError || !user) {
             console.error(userError);
-            return;
+            return;git 
         }
         try {
             const response = await fetch("/api/db/deleteReceipts", {
