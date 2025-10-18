@@ -130,11 +130,7 @@ const Dashboard = () => {
                         <div className="mb-4">
                             <SearchBar onSearch={handleSearch}/>
                         </div>
-                        <ReceiptGrid
-                            receipts={isSearching ? searchResults : receipts}
-                            selectedCategory={selectedCategory}
-                            isSearching={isSearching}
-                        />
+                        <ReceiptGrid />
                     </div>
                 </div>
             </div>
