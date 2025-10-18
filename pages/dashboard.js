@@ -11,14 +11,14 @@ const Dashboard = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6"> 
                     <div className="md:col-span-1">
                         <UploadButton/>
+                        <div className="mt-6">
+                            <h2 className="text-lg font-medium mb-3 text-blue-300">
+                                Categories
+                            </h2>
+                            <CategorySidebar/>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="flex flex-col">
-                <h2 className="text-lg font-medium mb-3 text-blue-300">
-                    Categories
-                </h2>
-                <CategorySidebar />
             </div>
         </div>  
   )
