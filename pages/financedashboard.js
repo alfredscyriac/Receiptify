@@ -1,300 +1,286 @@
-import React, { useState, useEffect, useRef } from "react";
-import { supabase } from "@/lib/utils/supabaseClient";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import {
+  getLast30DaysReceipts,
+  calculateTotalSpending,
+  calculateCategoryBreakdown,
+  getCategoryColor,
+  generateFinancialAdvice,
+} from '@/lib/utils/financeHelpers';
+import FinancePieChart from '@/components/FinancePieChart';
+import { Lock, TrendingUp, DollarSign, Lightbulb } from 'lucide-react';
 
-const ReceiptifyDashboard = () => {
+export default function FinanceDashboard() {
   const [receipts, setReceipts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const chartRef = useRef(null);
-  const chartInstanceRef = useRef(null);
+  const [loadingAdvice, setLoadingAdvice] = useState(false);
+  const [totalSpending, setTotalSpending] = useState(0);
+  const [categoryBreakdown, setCategoryBreakdown] = useState([]);
+  const [hasAccess, setHasAccess] = useState(false);
+  const [financialAdvice, setFinancialAdvice] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
-    fetchReceipts();
-  }, []);
+    loadFinanceData();
+  }, []); 
 
-  useEffect(() => {
-    if (receipts.length > 0) {
-      renderChart();
-    }
-    return () => {
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.destroy();
-      }
-    };
-  }, [receipts]);
+  const loadFinanceData = async () => {
+    setLoading(true); 
 
-  const fetchReceipts = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("receipts")
-        .select(
-          "id, total_amount, category, receipt_date, merchant, created_at"
-        )
-        .order("receipt_date", { ascending: false });
+    const { receipts, error } = await getLast30DaysReceipts(); 
 
-      if (error) throw error;
-      setReceipts(data || []);
-    } catch (error) {
-      console.error("Error fetching receipts:", error);
-    } finally {
+    if(error) {
+      console.error('Error loading finance data:', error); 
       setLoading(false);
+      return;
     }
-  };
+    setReceipts(receipts); 
 
-  const calculateTotalSpending = () => {
-    return receipts.reduce(
-      (sum, receipt) => sum + parseFloat(receipt.total_amount || 0),
-      0
-    );
-  };
+    if (receipts.length >= 5) {
+      setHasAccess(true);
+      const total = calculateTotalSpending(receipts);
+      const breakdown = calculateCategoryBreakdown(receipts);
+      setTotalSpending(total);
+      setCategoryBreakdown(breakdown);
 
-  const calculateCategorySpending = () => {
-    const categoryTotals = {};
-    receipts.forEach((receipt) => {
-      const category = receipt.category || "Other";
-      categoryTotals[category] =
-        (categoryTotals[category] || 0) + parseFloat(receipt.total_amount || 0);
-    });
-    return categoryTotals;
-  };
-
-  const renderChart = () => {
-    if (!chartRef.current) return;
-
-    const categorySpending = calculateCategorySpending();
-    const categories = Object.keys(categorySpending);
-    const amounts = Object.values(categorySpending);
-    const total = amounts.reduce((sum, amount) => sum + amount, 0);
-
-    const colors = [
-      "#a855f7", // purple
-      "#06b6d4", // cyan
-      "#6366f1", // indigo
-      "#ec4899", // pink
-      "#10b981", // green
-      "#f59e0b", // amber
-      "#ef4444", // red
-      "#8b5cf6", // violet
-    ];
-
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
+      // Generate financial advice
+      loadFinancialAdvice(total, breakdown);
+    } else {
+      setHasAccess(false);
     }
 
-    const ctx = chartRef.current.getContext("2d");
-    chartInstanceRef.current = new Chart(ctx, {
-      type: "pie",
-      data: {
-        labels: categories.map((cat, idx) => {
-          const percent = ((amounts[idx] / total) * 100).toFixed(1);
-          return `${cat}: ${percent}%`;
-        }),
-        datasets: [
-          {
-            data: amounts,
-            backgroundColor: colors.slice(0, categories.length),
-            borderColor: "#1e293b",
-            borderWidth: 2,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: "right",
-            labels: {
-              color: "#94a3b8",
-              padding: 15,
-              font: {
-                size: 13,
-              },
-            },
-          },
-          tooltip: {
-            callbacks: {
-              label: function (context) {
-                const value = context.parsed;
-                return `$${value.toFixed(2)}`;
-              },
-            },
-          },
-        },
-      },
-    });
+    setLoading(false);
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  };
+  const loadFinancialAdvice = async (total, breakdown) => {
+    setLoadingAdvice(true);
+    const { advice, error } = await generateFinancialAdvice(total, breakdown);
+
+    if (!error && advice) {
+      setFinancialAdvice(advice);
+    }
+    setLoadingAdvice(false);
+  }; 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="text-slate-400 text-lg">Loading...</div>
+      <div className='min-h-screen flex items-center justify-center relative overflow-hidden'>
+        {/* Gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary-glow to-accent" />
+
+        {/* Animated background elements - very prominent */}
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-white rounded-full blur-3xl animate-pulse" />
+          <div
+            className="absolute bottom-0 right-0 w-[900px] h-[900px] bg-cyan-400 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-purple-400 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "2s" }}
+          />
+          <div
+            className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-pink-300 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "0.5s" }}
+          />
+          <div
+            className="absolute bottom-1/4 left-1/4 w-[650px] h-[650px] bg-indigo-400 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1.5s" }}
+          />
+        </div>
+
+        <div className="text-center relative z-10">
+          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4'></div>
+          <p className='text-white'>
+              Loading your financial overview..
+          </p>
+        </div>
       </div>
     );
   }
 
-  if (receipts.length === 0) {
+  if (!hasAccess) {
     return (
-      <div className="min-h-screen bg-slate-900 p-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold text-white">
-              Receiptify Dashboard{" "}
-              <span className="text-sm text-indigo-400 font-normal ml-2">
-                Beta
-              </span>
-            </h1>
-          </div>
-          <div className="text-center text-slate-400 text-lg mt-20">
-            No receipts found in database
-          </div>
+      <div className='min-h-screen text-white relative overflow-hidden'>
+        {/* Gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary-glow to-accent" />
+
+        {/* Animated background elements - very prominent */}
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-white rounded-full blur-3xl animate-pulse" />
+          <div
+            className="absolute bottom-0 right-0 w-[900px] h-[900px] bg-cyan-400 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-purple-400 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "2s" }}
+          />
+          <div
+            className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-pink-300 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "0.5s" }}
+          />
+          <div
+            className="absolute bottom-1/4 left-1/4 w-[650px] h-[650px] bg-indigo-400 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1.5s" }}
+          />
         </div>
-      </div>
-    );
-  }
 
-  const totalSpending = calculateTotalSpending();
-
-  return (
-    <div className="min-h-screen bg-slate-900 p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-white">
-            Receiptify Dashboard{" "}
-            <span className="text-sm text-indigo-400 font-normal ml-2">
-              Beta
-            </span>
+        <div className="max-w-4xl mx-auto px-6 py-12 relative z-10">
+          <h1 className='text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-600 via-purple-500 to-cyan-500 bg-clip-text text-transparent'>
+            Financial Dashboard
           </h1>
-          <div className="flex gap-4">
-            <button className="text-slate-400 hover:text-white">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                />
-              </svg>
-            </button>
-            <button className="text-slate-400 hover:text-white">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
+          <div className='bg-gray-800 rounded-xl p-12 text-center border border-gray-700'>
+            <div className='bg-gray-700 bg-opacity-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6'>
+              <Lock className='w-10 h-10 text-purple-400'/>
+            </div>
+            <h2 className="text-2xl font-semibold mb-4">Unlock your financial insights</h2>
+            <p className="text-gray-400 text-lg mb-6">
+              You need at least <span className="text-purple-400 font-semibold">5 receipts</span> from the last 30 days to access your financial dashboard.
+            </p>
 
-        <h2 className="text-2xl font-bold text-white mb-6">
-          Financial Overview
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-slate-800 rounded-xl p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-slate-400 text-sm">Total Spending</span>
-              <div className="bg-slate-700 p-2 rounded-lg">
-                <svg
-                  className="w-5 h-5 text-cyan-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                  />
-                </svg>
+            <div className="bg-gray-700 bg-opacity-30 rounded-lg p-6 mb-6">
+              <p className="text-gray-300 mb-2">Current Progress:</p>
+              <div className="flex items-center justify-center gap-4">
+                <div className='text-3xl font-bold text-purple-400'>{receipts.length}</div>
+                <div className="text-2xl text-gray-500">/</div>
+                <div className="text-3xl font-bold text-gray-400">5</div>
+              </div>
+              <div className="w-full bg-gray-700 rounded-full h-3 mt-4">
+                <div
+                  className="bg-gradient-to-r from-purple-600 to-cyan-500 h-3 rounded-full transition-all duration-500"
+                  style={{ width: `${(receipts.length / 5) * 100}%` }}
+                ></div>
               </div>
             </div>
-            <div className="text-3xl font-bold text-white">
-              ${totalSpending.toFixed(2)}
-            </div>
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <div className="bg-slate-800 rounded-xl p-6">
-            <h3 className="text-xl font-bold text-white mb-6">
-              Spending by Category
-            </h3>
-            <div className="h-80">
-              <canvas ref={chartRef}></canvas>
-            </div>
-          </div>
-        </div>
+            <p className="text-gray-400">
+              Upload <span className="text-purple-400 font-semibold">{5 - receipts.length} more receipt{5 - receipts.length !== 1 ? 's' : ''}</span> to unlock detailed spending analysis and personalized financial advice.
+            </p>
 
-        <div className="bg-slate-800 rounded-xl p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-white">
-              Recent Transactions
-            </h3>
-            <button className="text-cyan-400 hover:text-cyan-300 text-sm font-medium">
-              View All
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="mt-8 bg-gradient-to-r from-purple-600 via-purple-500 to-cyan-500 hover:from-purple-700 hover:via-purple-600 hover:to-cyan-600 text-white font-semibold py-3 px-8 rounded-lg transition duration-200"
+            >
+              Go to Dashboard
             </button>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="text-slate-400 text-sm border-b border-slate-700">
-                  <th className="text-left pb-3 font-medium">Merchant</th>
-                  <th className="text-left pb-3 font-medium">Category</th>
-                  <th className="text-left pb-3 font-medium">Date</th>
-                  <th className="text-right pb-3 font-medium">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {receipts.slice(0, 7).map((receipt) => (
-                  <tr
-                    key={receipt.id}
-                    className="border-b border-slate-700/50 hover:bg-slate-700/30"
-                  >
-                    <td className="py-4 text-white">
-                      {receipt.merchant || "Unknown"}
-                    </td>
-                    <td className="py-4">
-                      <span className="text-slate-300">
-                        {receipt.category || "Other"}
-                      </span>
-                    </td>
-                    <td className="py-4 text-slate-400">
-                      {formatDate(receipt.receipt_date)}
-                    </td>
-                    <td className="py-4 text-right text-white font-medium">
-                      ${parseFloat(receipt.total_amount || 0).toFixed(2)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
+    )
+  }
 
-      <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  // Main dashboard (user has 5+ receipts)
+  return (
+    <div className="min-h-screen text-white font-inter relative overflow-hidden">
+      {/* Gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary-glow to-accent" />
+
+      {/* Animated background elements - very prominent */}
+      <div className="absolute inset-0 opacity-40">
+        <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-white rounded-full blur-3xl animate-pulse" />
+        <div
+          className="absolute bottom-0 right-0 w-[900px] h-[900px] bg-cyan-400 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-purple-400 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "2s" }}
+        />
+        <div
+          className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-pink-300 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "0.5s" }}
+        />
+        <div
+          className="absolute bottom-1/4 left-1/4 w-[650px] h-[650px] bg-indigo-400 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1.5s" }}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 py-8 relative z-10">
+
+        <p className="text-center text-gray-400 mb-8">
+          Last 30 days • {receipts.length} transaction{receipts.length !== 1 ? 's' : ''}
+        </p>
+
+        {/* Main Summary Card with Pie Chart */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Total Spending Card */}
+          <div className="bg-gradient-to-br from-purple-600 via-purple-500 to-cyan-500 rounded-xl p-8 shadow-xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="bg-white bg-opacity-20 rounded-full p-3">
+                <DollarSign className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-2xl font-semibold text-white">Total Spending</h2>
+            </div>
+            <p className="text-5xl font-bold text-white mb-2">
+              ${totalSpending.toFixed(2)}
+            </p>
+            <p className="text-purple-100">in the last 30 days</p>
+          </div>
+
+          {/* Pie Chart */}
+          <div className="bg-gray-800 rounded-xl p-8 border border-gray-700">
+            <h3 className="text-xl font-semibold mb-4 text-gray-200">Spending Breakdown</h3>
+            <FinancePieChart
+              categoryBreakdown={categoryBreakdown}
+              totalSpending={totalSpending}
+            />
+          </div>
+        </div>
+
+        {/* Category Cards */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <TrendingUp className="w-6 h-6 text-purple-400" />
+            Spending by Category
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {categoryBreakdown.map(({ category, amount }) => (
+              <div
+                key={category}
+                className="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-purple-500 transition-all duration-200"
+              >
+                <div
+                  className="w-12 h-1 rounded-full mb-3"
+                  style={{ backgroundColor: getCategoryColor(category) }}
+                ></div>
+                <h3 className="text-lg font-medium text-gray-200 mb-2">{category}</h3>
+                <p className="text-3xl font-bold text-white">${amount.toFixed(2)}</p>
+                <p className="text-sm text-gray-400 mt-2">
+                  {((amount / totalSpending) * 100).toFixed(1)}% of total
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Financial Advice Section */}
+        <div className="bg-gray-800 rounded-xl p-8 border border-gray-700">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="bg-purple-600 bg-opacity-20 rounded-full p-3">
+              <Lightbulb className="w-6 h-6 text-purple-400" />
+            </div>
+            <h2 className="text-2xl font-bold text-purple-400">Financial Insights</h2>
+          </div>
+
+          {loadingAdvice ? (
+            <div className="flex items-center gap-3 text-gray-400">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-purple-500"></div>
+              <p>Generating personalized financial advice...</p>
+            </div>
+          ) : financialAdvice ? (
+            <div className="prose prose-invert max-w-none">
+              <div className="text-gray-300 whitespace-pre-wrap">{financialAdvice}</div>
+            </div>
+          ) : (
+            <p className="text-gray-400">
+              Unable to generate financial advice at this time. Please try again later.
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
-};
-
-export default ReceiptifyDashboard;
+}

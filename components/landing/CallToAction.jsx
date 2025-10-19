@@ -31,7 +31,7 @@ export const CTA = () => {
             className="text-xl md:text-2xl text-white/90 mb-8 animate-fade-in"
             style={{ animationDelay: "0.1s" }}
           >
-            Join thousands of users who've ditched paper receipts for good
+            Ditch paper receipts for good
           </p>
 
           <div
@@ -53,20 +53,6 @@ export const CTA = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in"
             style={{ animationDelay: "0.3s" }}
           >
-            {/* <Button
-              size="xl"
-              className="bg-white text-primary hover:bg-white/90 shadow-2xl hover:scale-105 font-semibold"
-            >
-              Start Free Today
-              <ArrowRight className="ml-2" />
-            </Button>
-            <Button
-              variant="outline"
-              size="xl"
-              className="bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur-sm"
-            >
-              Schedule a Demo
-            </Button> */}
           </div>
           <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 mt-3 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 transition-all hover:scale-105 hover:cursor-pointer">
             Get Started Today
