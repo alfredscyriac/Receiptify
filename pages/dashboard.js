@@ -13,11 +13,29 @@ const Dashboard = () => {
     const [isSearching, setIsSearching] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState("Food & Dining")
     const router = useRouter();
+
+    const handleLogout = async () => {
+        try {
+            const supabase = createClient()
+            const { error } = await supabase.auth.signOut()
+
+            if (error) {
+                console.error('Logout error:', error)
+                alert('Failed to log out. Please try again.')
+            } else {
+                router.push('/')
+            }
+        } catch (err) {
+            console.error('Unexpected logout error:', err)
+            alert('Failed to log out. Please try again.')
+        }
+    }
+
     const nav = [
         { icon: HomeIcon, label: 'Home', onClickHandler: () => router.push("/") },
         { icon: FileTextIcon, label: 'Receipts', onClickHandler: () => router.push("/dashboard") },
         { icon: ChartPie, label: 'Finance', onClickHandler: () => router.push("/financedashboard") },
-        { icon: LogOut, label: 'Logout', onClickHandler: () => null},
+        { icon: LogOut, label: 'Logout', onClickHandler: handleLogout},
     ]
 
     useEffect(() => {
@@ -104,7 +122,6 @@ const Dashboard = () => {
             return;
         }
 
-        // Optimistically remove receipt from UI
         const prevReceipts = receipts
         const prevSearch = searchResults
 
@@ -120,7 +137,6 @@ const Dashboard = () => {
 
             const result = await response.json()
             if (!response.ok) {
-                // rollback on failure
                 setReceipts(prevReceipts)
                 setSearchResults(prevSearch)
                 console.error("Delete failed:", result)
@@ -129,7 +145,6 @@ const Dashboard = () => {
 
             return result
         } catch (err) {
-            // rollback on exception
             setReceipts(prevReceipts)
             setSearchResults(prevSearch)
             console.error(err)
@@ -138,20 +153,16 @@ const Dashboard = () => {
     }
 
     const filteredReceipts = receipts.filter(receipt => {
-    // If no category selected, show all
     if (!selectedCategory) return true
     
-    // Match category
     const receiptCategory = receipt.category || 'Miscellaneous'
     return receiptCategory === selectedCategory
     })
 
     return (
         <div className="w-full min-h-screen text-white relative overflow-hidden">
-            {/* Gradient background */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary-glow to-accent" />
 
-            {/* Animated background elements - subtle */}
             <div className="absolute inset-0 opacity-20">
                 <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-white rounded-full blur-3xl" />
                 <div
@@ -164,13 +175,10 @@ const Dashboard = () => {
 
             <div className="max-w-full mx-auto px-4 sm:px-6 py-8 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Sidebar - Left Column */}
                     <div className="lg:col-span-1 w-full max-w-md mx-auto lg:mx-0">
                         <div className="space-y-6">
-                            {/* Upload Button */}
                             <UploadButton onUploadComplete={handleUploadComplete}/>
 
-                            {/* Menu Navigation - 2x2 Grid */}
                             <div className="grid grid-cols-2 gap-3">
                                 {nav.map((n) => {
                                     const Icon = n.icon
@@ -188,7 +196,6 @@ const Dashboard = () => {
                                 })}
                             </div>
 
-                            {/* Categories */}
                             <div>
                                 <h2 className="text-lg font-medium mb-3 text-blue-300">
                                     Categories
@@ -201,7 +208,6 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Main Content - Right Column */}
                     <div className="lg:col-span-2 w-full">
                         <div className="mb-4">
                             <SearchBar onSearch={handleSearch}/>
