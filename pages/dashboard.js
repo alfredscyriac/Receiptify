@@ -39,8 +39,9 @@ const Dashboard = () => {
         setReceipts(results)
     }
 
-    const getReceipts = async(category_name) => {
+    const getReceipts = async(category_name = selectedCategory) => {
         const supabase = createClient()
+
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         if(userError || !user) {
             console.error(userError);
@@ -51,12 +52,14 @@ const Dashboard = () => {
             .from("receipts")
             .select("*")
             .eq("category", category_name)
-            .eq("user_id", user.id);
+            .eq("user_id", user.id)
+            .order('created_at', { ascending: false })
         
         if (error) {
             console.error(error);
             return [];
         }
+        console.log(receipts, category_name)
         return receipts
     }
 
