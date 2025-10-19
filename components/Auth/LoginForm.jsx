@@ -2,7 +2,6 @@ import { useState } from 'react'
 import createClient from '@/lib/utils/supabaseClient'
 import { useRouter } from 'next/router'
 import { Mail, Lock } from 'lucide-react'
-// deploy
 
 export default function LoginForm(){
     const [email, setEmail] = useState('')
@@ -35,10 +34,13 @@ export default function LoginForm(){
         setLoading(true)
         setError(null)
 
+        // Use NEXT_PUBLIC_SITE_URL if available, otherwise fall back to window.location.origin
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${window.location.origin}/auth/callback`,
+                redirectTo: `${baseUrl}/auth/callback`,
             },
         })
 
