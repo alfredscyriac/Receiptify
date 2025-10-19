@@ -112,6 +112,15 @@ const Dashboard = () => {
         }
     }
 
+    const filteredReceipts = receipts.filter(receipt => {
+    // If no category selected, show all
+    if (!selectedCategory) return true
+    
+    // Match category
+    const receiptCategory = receipt.category || 'Miscellaneous'
+    return receiptCategory === selectedCategory
+    })
+
     return (
         <div className="w-full min-h-screen text-white relative overflow-hidden">
             {/* Gradient background */}
@@ -147,7 +156,7 @@ const Dashboard = () => {
                             <SearchBar onSearch={handleSearch}/>
                         </div>
                         <ReceiptGrid
-                            receipts={isSearching ? searchResults : receipts}
+                            receipts={isSearching ? searchResults : filteredReceipts}
                             selectedCategory={selectedCategory}
                             isSearching={isSearching}
                         />
