@@ -162,38 +162,47 @@ const Dashboard = () => {
                 />
             </div>
 
-            <div className="max-w-5xl mx-auto px-6 py-8 relative z-10 md:pl-[6.5rem]">
+            <div className="max-w-full mx-auto px-4 sm:px-6 py-8 relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Sidebar - Left Column */}
+                    <div className="lg:col-span-1 w-full max-w-md mx-auto lg:mx-0">
+                        <div className="space-y-6">
+                            {/* Upload Button */}
+                            <UploadButton onUploadComplete={handleUploadComplete}/>
 
-                {/* top header / logo area removed — sidebar lives in the left column below */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6"> 
-                    <div className="md:col-span-1 space-y-6">
-                        <UploadButton onUploadComplete={handleUploadComplete}/>
-                    <div className="grid grid-cols-2 gap-y-8 gap-x-15 px-4 ml-8 ">
-                        {nav.map((n) => {
-                            const Icon = n.icon
-                            return (
-                                <button key={n.label} className="w-10 h-12 p-3 gap-2 flex items-center justify-center text-gray-300 hover:cursor-pointer" title={n.label}
-                                onClick={n.onClickHandler}
-                                >
-                                    <div className='flex w-30 justify-center items-center gap-2 font-extralight bg-gray-200/25 hover:bg-gray-700/40 transition-colors rounded-lg p-3'>
-                                        <Icon className="w-8 h-8" />
-                                        <h1 className='text-sm'>{n.label}</h1>
-                                    </div>
-                                </button>
-                            )
-                        })}
-                    </div>
-                        <div className="mt-6">
-                            <h2 className="text-lg font-medium mb-3 text-blue-300">
-                                Categories
-                            </h2>
-                            <CategorySidebar
-                                onSelectCategory={handleCategorySelect}
-                                selectedCategory={selectedCategory}
-                            />
+                            {/* Menu Navigation - 2x2 Grid */}
+                            <div className="grid grid-cols-2 gap-3">
+                                {nav.map((n) => {
+                                    const Icon = n.icon
+                                    return (
+                                        <button
+                                            key={n.label}
+                                            className="flex flex-col items-center justify-center gap-2 bg-gray-200/25 hover:bg-gray-700/40 transition-colors rounded-lg p-4 text-gray-300 hover:cursor-pointer"
+                                            title={n.label}
+                                            onClick={n.onClickHandler}
+                                        >
+                                            <Icon className="w-6 h-6" />
+                                            <span className='text-xs font-light'>{n.label}</span>
+                                        </button>
+                                    )
+                                })}
+                            </div>
+
+                            {/* Categories */}
+                            <div>
+                                <h2 className="text-lg font-medium mb-3 text-blue-300">
+                                    Categories
+                                </h2>
+                                <CategorySidebar
+                                    onSelectCategory={handleCategorySelect}
+                                    selectedCategory={selectedCategory}
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div className="md:col-span-2">
+
+                    {/* Main Content - Right Column */}
+                    <div className="lg:col-span-2 w-full">
                         <div className="mb-4">
                             <SearchBar onSearch={handleSearch}/>
                         </div>
