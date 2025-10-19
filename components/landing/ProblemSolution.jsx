@@ -23,15 +23,14 @@ export const ProblemSolution = () => {
   ];
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-purple-900">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-5xl font-bold text-white mb-4">
             The Receipt Problem
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Managing physical receipts is frustrating and inefficient. We built
-            a better solution.
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+            Managing physical receipts is frustrating and inefficient
           </p>
         </div>
 

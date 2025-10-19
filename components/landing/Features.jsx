@@ -38,7 +38,7 @@ export const Features = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Everything You Need to Stay Organized
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
             Powerful features designed to make receipt management simple and
             efficient
           </p>

@@ -23,7 +23,7 @@ export const Hero = () => {
                 Perfectly Organized
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-xl">
+            <p className="text-lg text-gray-300 max-w-xl">
               Never lose a receipt again. AI-powered organization keeps your
               finances in perfect order.
             </p>
@@ -44,13 +44,6 @@ export const Hero = () => {
               className="relative rounded-3xl shadow-2xl w-full transform hover:scale-105 transition-transform duration-500"
             />
           </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white/50 rounded-full mt-2" />
         </div>
       </div>
     </section>
