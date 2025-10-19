@@ -10,10 +10,8 @@ export const CTA = () => {
 
   return (
     <section className="py-24 relative overflow-hidden">
-      {/* Gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary-glow to-accent" />
 
-      {/* Animated background elements */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl animate-pulse" />
         <div
