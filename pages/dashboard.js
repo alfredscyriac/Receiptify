@@ -53,7 +53,7 @@ const Dashboard = () => {
             .select("*")
             .eq("category", category_name)
             .eq("user_id", user.id)
-            .order('created_at', { ascending: false })
+            .order('created_at', { ascending: true })
         
         if (error) {
             console.error(error);
@@ -113,11 +113,22 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="w-full min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-            <div className="max-w-5xl mx-auto px-6 py-8">
-                <h1 className="text-3xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-                    Receipt Manager
-                </h1>
+        <div className="w-full min-h-screen text-white relative overflow-hidden">
+            {/* Gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary-glow to-accent" />
+
+            {/* Animated background elements - subtle */}
+            <div className="absolute inset-0 opacity-20">
+                <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-white rounded-full blur-3xl" />
+                <div
+                    className="absolute bottom-0 right-0 w-[650px] h-[650px] bg-cyan-400 rounded-full blur-3xl"
+                />
+                <div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-400 rounded-full blur-3xl"
+                />
+            </div>
+
+            <div className="max-w-5xl mx-auto px-6 py-8 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6"> 
                     <div className="md:col-span-1">
                         <UploadButton onUploadComplete={handleUploadComplete}/>
