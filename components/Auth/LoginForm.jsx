@@ -25,7 +25,9 @@ export default function LoginForm(){
             setError(error.message)
             setLoading(false)
         } else {
-            router.push('/dashboard')
+            // Redirect to the page they came from, or default to dashboard
+            const redirectTo = router.query.redirectedFrom || '/dashboard'
+            router.push(redirectTo)
         }
     }
 

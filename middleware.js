@@ -54,13 +54,28 @@ export async function middleware(request) {
         }
     )
 
-    await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // Protected routes that require authentication
+    const protectedRoutes = ['/dashboard', '/financedashboard']
+    const isProtectedRoute = protectedRoutes.some(route =>
+        request.nextUrl.pathname === route || request.nextUrl.pathname.startsWith(`${route}/`)
+    )
+
+    // If accessing a protected route without authentication, redirect to login
+    if (isProtectedRoute && !user) {
+        const redirectUrl = new URL('/login', request.url)
+        redirectUrl.searchParams.set('redirectedFrom', request.nextUrl.pathname)
+        return NextResponse.redirect(redirectUrl)
+    }
+
     return response
 }
 
 export const config = {
     matcher: [
         '/dashboard/:path*',
+        '/financedashboard/:path*',
         '/api/:path*'
     ],
 }
