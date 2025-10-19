@@ -124,7 +124,6 @@ const ReceiptGrid = ({ receipts = [], onSelectReceipt, selectedCategory, searchQ
                                         </h3>
                                         
                                         <div className="flex items-center gap-2 mb-3">
-                                            <DollarSign className="w-5 h-5 text-green-400" />
                                             <span className="text-2xl font-bold text-green-400">
                                                 ${displayAmount}
                                             </span>
