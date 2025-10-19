@@ -147,14 +147,27 @@ const ReceiptGrid = ({ receipts = [], onSelectReceipt, selectedCategory, searchQ
                                                 View
                                             </button>
                                             {imageUrl && (
-                                                <a
-                                                    href={imageUrl}
-                                                    download
-                                                    className="flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg transition-colors text-sm"
+                                                <button
+                                                    onClick={() => {
+                                                    fetch(imageUrl)
+                                                        .then(response => response.blob())
+                                                        .then(blob => {
+                                                        const url = window.URL.createObjectURL(blob)
+                                                        const a = document.createElement('a')
+                                                        a.href = url
+                                                        a.download = `receipt-${receipt.id}.png` // or use merchant name
+                                                        document.body.appendChild(a)
+                                                        a.click()
+                                                        window.URL.revokeObjectURL(url)
+                                                        document.body.removeChild(a)
+                                                        })
+                                                        .catch(err => console.error('Download failed:', err))
+                                                    }}
+                                                    className="flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg transition-colors text-sm hover: cursor-pointer"
                                                 >
                                                     <Download className="w-4 h-4 mr-1" />
-                                                    Download
-                                                </a>
+                                                     Download
+                                                </button>
                                             )}
                                             <button
                                                 onClick={() => handleDelete(receipt.id)}
@@ -177,7 +190,7 @@ const ReceiptGrid = ({ receipts = [], onSelectReceipt, selectedCategory, searchQ
                     className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
                     onClick={closeModal}
                 >
-                    <div className="relative max-w-4xl max-h-[90vh] w-full">
+                    <div className="relative w-full max-w-lg">
                         <button
                             onClick={closeModal}
                             className="absolute -top-12 right-0 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition-colors"
