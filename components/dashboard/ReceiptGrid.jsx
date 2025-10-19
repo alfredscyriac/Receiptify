@@ -158,7 +158,7 @@ const ReceiptGrid = ({ receipts = [], onSelectReceipt, selectedCategory, searchQ
                                             )}
                                             <button
                                                 onClick={() => handleDelete(receipt.id)}
-                                                className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+                                                className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors hover:cursor-pointer"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>

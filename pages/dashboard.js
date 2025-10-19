@@ -4,12 +4,21 @@ import UploadButton from "@/components/dashboard/UploadButton";
 import SearchBar from "@/components/dashboard/SearchBar";
 import ReceiptGrid from "@/components/dashboard/ReceiptGrid";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { ChartPie, FileTextIcon, HomeIcon, LogOut } from "lucide-react";
 
 const Dashboard = () => {
     const [receipts, setReceipts] = useState([])
     const [searchResults, setSearchResults] = useState([])
     const [isSearching, setIsSearching] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState("Food & Dining")
+    const router = useRouter();
+    const nav = [
+        { icon: HomeIcon, label: 'Home', onClickHandler: () => router.push("/") },
+        { icon: FileTextIcon, label: 'Receipts', onClickHandler: () => router.push("/dashboard") },
+        { icon: ChartPie, label: 'Finance', onClickHandler: () => router.push("/financedashboard") },
+        { icon: LogOut, label: 'Logout', onClickHandler: () => null},
+    ]
 
     useEffect(() => {
         handleCategorySelect("Food & Dining")
@@ -86,29 +95,45 @@ const Dashboard = () => {
     }
 
     const deleteReceipt = async(receiptId) => {
+        if (!receiptId) return
+
         const supabase = createClient()
         const { data: { user }, error: userError } = await supabase.auth.getUser();
-        if(userError || !user) {
+        if (userError || !user) {
             console.error(userError);
             return;
         }
+
+        // Optimistically remove receipt from UI
+        const prevReceipts = receipts
+        const prevSearch = searchResults
+
+        setReceipts((prev) => prev.filter((r) => r.id !== receiptId))
+        setSearchResults((prev) => prev.filter((r) => r.id !== receiptId))
+
         try {
-            const response = await fetch("/api/db/deleteReceipts", {
+            const response = await fetch("/api/deleteReceipt", {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ receiptId, userId: user.id }),
-            });
+            })
 
             const result = await response.json()
             if (!response.ok) {
-                console.error("Delete failed:", result);
-                return { error: result };
+                // rollback on failure
+                setReceipts(prevReceipts)
+                setSearchResults(prevSearch)
+                console.error("Delete failed:", result)
+                return { error: result }
             }
-            return result
 
-        } catch(err) {
+            return result
+        } catch (err) {
+            // rollback on exception
+            setReceipts(prevReceipts)
+            setSearchResults(prevSearch)
             console.error(err)
-            return
+            return { error: err }
         }
     }
 
@@ -137,10 +162,27 @@ const Dashboard = () => {
                 />
             </div>
 
-            <div className="max-w-5xl mx-auto px-6 py-8 relative z-10">
+            <div className="max-w-5xl mx-auto px-6 py-8 relative z-10 md:pl-[6.5rem]">
+
+                {/* top header / logo area removed — sidebar lives in the left column below */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6"> 
-                    <div className="md:col-span-1">
+                    <div className="md:col-span-1 space-y-6">
                         <UploadButton onUploadComplete={handleUploadComplete}/>
+                    <div className="grid grid-cols-2 gap-y-8 gap-x-15 px-4 ml-8 ">
+                        {nav.map((n) => {
+                            const Icon = n.icon
+                            return (
+                                <button key={n.label} className="w-10 h-12 p-3 gap-2 flex items-center justify-center text-gray-300 hover:cursor-pointer" title={n.label}
+                                onClick={n.onClickHandler}
+                                >
+                                    <div className='flex w-30 justify-center items-center gap-2 font-extralight bg-gray-200/25 hover:bg-gray-700/40 transition-colors rounded-lg p-3'>
+                                        <Icon className="w-8 h-8" />
+                                        <h1 className='text-sm'>{n.label}</h1>
+                                    </div>
+                                </button>
+                            )
+                        })}
+                    </div>
                         <div className="mt-6">
                             <h2 className="text-lg font-medium mb-3 text-blue-300">
                                 Categories
@@ -159,6 +201,7 @@ const Dashboard = () => {
                             receipts={isSearching ? searchResults : filteredReceipts}
                             selectedCategory={selectedCategory}
                             isSearching={isSearching}
+                            onDelete={deleteReceipt}
                         />
                     </div>
                 </div>
