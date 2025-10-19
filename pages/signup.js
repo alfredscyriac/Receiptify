@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import SignUpForm from "@/components/auth/SignUpForm";
+import SignUpForm from "@/components/Auth/SignUpForm";
 import Link from "next/link";
 import createClient from "@/lib/utils/supabaseClient";
 

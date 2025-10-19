@@ -3,7 +3,7 @@ import { ProblemSolution } from "../components/landing/ProblemSolution";
 import { Features } from "../components/landing/Features";
 import { HowItWorks } from "../components/landing/HowItWorks";
 import { CTA } from "../components/landing/CallToAction";
-import Navbar from "@/components/auth/Navbar";
+import Navbar from "@/components/Auth/Navbar";
 
 const Index = () => {
   return (

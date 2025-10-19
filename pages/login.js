@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import LoginForm from "@/components/auth/LoginForm";
+import LoginForm from "@/components/Auth/LoginForm";
 import Link from "next/link";
 import createClient from "@/lib/utils/supabaseClient";
 
