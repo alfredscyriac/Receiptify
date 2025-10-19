@@ -40,7 +40,7 @@ export const HowItWorks = () => {
             How It Works
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Four simple steps to keeps your finances in perfect order.
+            Four simple steps to keep your finances in perfect order.
           </p>
         </div>
 

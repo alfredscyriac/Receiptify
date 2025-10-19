@@ -28,7 +28,7 @@ export const Hero = () => {
               finances in perfect order.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/dashboard" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 transition-all hover:scale-105 hover:cursor-pointer">
+              <Link href="/signup" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 transition-all hover:scale-105 hover:cursor-pointer">
                 Get Started
                 <ArrowRight className="w-5 h-5" />
               </Link>
