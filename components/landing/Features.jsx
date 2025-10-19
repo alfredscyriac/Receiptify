@@ -14,14 +14,14 @@ export const Features = () => {
       title: "Smart Organization",
       description:
         "Auto-categorized folders plus custom categories make finding receipts effortless",
-      image: "/feature-organize.jpg",
+      image: "/dashboard.png",
     },
     {
       icon: TrendingUp,
       title: "Financial Insights",
       description:
         "Track your 30-day spending patterns and see exactly where your money goes",
-      image: "/feature-insights.jpg",
+      image: "/finance.png",
     },
   ];
 

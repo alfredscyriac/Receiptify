@@ -80,14 +80,13 @@ const ReceiptGrid = ({ receipts = [], onSelectReceipt, selectedCategory, searchQ
             <div className="w-full">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                     {receipts.map((receipt) => {
-                        // Map DB fields (common names used elsewhere in project)
-                        const imageUrl = receipt.image_url || receipt.imageUrl || receipt.url || null
-                        const merchant = receipt.store_name || receipt.merchant_name || receipt.name || 'Unknown Merchant'
-                        const amountRaw = receipt.total_amount || receipt.totalAmount || receipt.amount || 0
+                        const imageUrl = receipt.image_url
+                        const merchant = receipt.store_name
+                        const amountRaw = receipt.total_amount
                         const numericAmount = parseFloat(amountRaw)
                         const displayAmount = isFinite(numericAmount) && !isNaN(numericAmount) ? numericAmount.toFixed(2) : '0.00'
                         const category = receipt.category || 'Miscellaneous'
-                        const dateRaw = receipt.receipt_date || receipt.receiptDate || receipt.created_at || receipt.date || null
+                        const dateRaw = receipt.receipt_date || receipt.created_at || null
                         const dateObj = dateRaw ? new Date(dateRaw) : null
                         const displayDate = dateObj && !isNaN(dateObj.getTime()) ? dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Unknown Date'
 
@@ -99,7 +98,6 @@ const ReceiptGrid = ({ receipts = [], onSelectReceipt, selectedCategory, searchQ
                                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-purple-500/5 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-all duration-300" />
                                 
                                 <div className="relative z-10">
-                                    {/* Receipt Image */}
                                     {imageUrl ? (
                                         <div 
                                             className="w-full h-44 bg-gray-700 cursor-pointer flex items-center justify-center overflow-hidden"
@@ -116,8 +114,6 @@ const ReceiptGrid = ({ receipts = [], onSelectReceipt, selectedCategory, searchQ
                                             <FileQuestionIcon className="w-8 h-8" />
                                         </div>
                                     )}
-
-                                    {/* Content */}
                                     <div className="p-4">
                                         <h3 className="text-lg font-semibold text-white mb-2 truncate">
                                             {merchant}
@@ -155,7 +151,7 @@ const ReceiptGrid = ({ receipts = [], onSelectReceipt, selectedCategory, searchQ
                                                         const url = window.URL.createObjectURL(blob)
                                                         const a = document.createElement('a')
                                                         a.href = url
-                                                        a.download = `receipt-${receipt.id}.png` // or use merchant name
+                                                        a.download = `receipt-${receipt.id}.png`
                                                         document.body.appendChild(a)
                                                         a.click()
                                                         window.URL.revokeObjectURL(url)
